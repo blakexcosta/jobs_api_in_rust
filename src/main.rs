@@ -13,11 +13,11 @@ use std::str::FromStr;
 
 // add import below
 // use api::user_api::{create_user, get_user, update_user, delete_user, get_all_users}; //import the handler here
-use api::order_api::hello;
 use api::order_api::{
     create_order, delete_order, get_account_orders, get_all_orders, get_buy_orders, get_order,
     get_sell_orders, update_order,
 }; //import the handler here
+use api::order_api::{hello, search};
 use repository::mongodb_repo::MongoRepo;
 use rocket::config;
 use rocket::fairing::{Fairing, Info, Kind};
@@ -96,11 +96,20 @@ fn rocket() -> _ {
 
     //rocket::ignite().attach(cors.to_cors().unwrap());
 
+    //------------------------------------------------------
     //User Story/TODOs
     //[X] - Migrate all Routes From Go over to Rust
-    //[] - Research the jobs api's we're pulling from (can find on discord)
-    //[] - test that can receive information from those api's
+    //[X] - Research the jobs api's we're pulling from (can find on discord)
+    //[X] - test that can send and receive info from serpapi (google)
+    //[] - have serpapi request be sent via json body instead of url params
+    //[] - test that can send and receive info from jsearch
     //[] - write that information to an excel sheet
+    //------------------------------------------------------
+
+    //------------------------------------------------------
+    //Optional TODOS
+    //[] - have a request sent via url params to serp api, replacing _ or + with whitespace, so that way don't have to send json payload
+    //------------------------------------------------------
 
     // create a connection to a db named "colony" and a collection named "market"
     //let db = MongoRepo::init("colony","market");
@@ -116,5 +125,6 @@ fn rocket() -> _ {
         // .mount("/", routes![get_buy_orders])
         // .mount("/", routes![get_sell_orders])
         .mount("/", routes![hello])
+        .mount("/", routes![search])
         .attach(CORS) // attach CORS options to allow frontend and backend to be separated
 }

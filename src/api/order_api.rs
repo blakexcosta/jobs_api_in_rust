@@ -1,13 +1,53 @@
 use crate::{models::order_model::Order, repository::mongodb_repo::MongoRepo};
 use mongodb::{bson::oid::ObjectId, results::InsertOneResult}; //modify here
 use rocket::{http::Status, serde::json::Json, State};
+use serpapi_search_rust::serp_api_search::SerpApiSearch;
+use std::collections::HashMap;
 
+use std::env;
+extern crate dotenv;
+use dotenv::dotenv;
 /// Used to welcome to the API if they hit a default endpoint
 /// # Endpoint Example
 /// `127.0.0.1:8000/`
 #[get("/")]
 pub fn hello() -> &'static str {
     "Welcome to the Rusty Jobs API!"
+}
+
+#[get("/search/<job_title>")]
+pub async fn search(job_title: String) -> Result<String, Status> {
+    //&'static str {
+    //Result<(), Box<dyn std::error::Error>> {
+
+    // get job title
+    let job_search: String = job_title;
+    if job_search.is_empty() {
+        return Err(Status::BadRequest);
+    };
+    // get serp api key from .env
+    dotenv().ok();
+    let serp_api_key = match env::var("SERPAPIKEY") {
+        Ok(v) => v.to_string(),
+        Err(_) => format!("Error loading env variable"),
+    };
+    let mut params = HashMap::<String, String>::new();
+    params.insert("engine".to_string(), "google_jobs".to_string());
+    params.insert("q".to_string(), job_search.to_string());
+    params.insert("hl".to_string(), "en".to_string());
+
+    let search = SerpApiSearch::google(params, serp_api_key.to_string());
+
+    let results = search.json().await.unwrap();
+    //match results
+
+    let jobs_results = results["jobs_results"].clone();
+    println!("results received");
+    println!("--- JSON ---");
+    println!(" - results: {:?}", jobs_results);
+
+    print!("ok");
+    Ok(jobs_results.to_string())
 }
 
 /// GET all orders in the market
