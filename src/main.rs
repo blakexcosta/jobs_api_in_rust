@@ -100,9 +100,8 @@ fn rocket() -> _ {
     //User Story/TODOs
     //[X] - Migrate all Routes From Go over to Rust
     //[X] - Research the jobs api's we're pulling from (can find on discord)
-    //[] - test that can receive information from those api's
     //[X] - test that can send and receive info from serpapi (google)
-    //[] - have request be sent via json body or url params (replacing)
+    //[] - have serpapi request be sent via json body instead of url params
     //[] - test that can send and receive info from jsearch
     //[] - write that information to an excel sheet
     //------------------------------------------------------
