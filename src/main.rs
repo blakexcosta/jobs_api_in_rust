@@ -97,7 +97,7 @@ fn rocket() -> _ {
     //rocket::ignite().attach(cors.to_cors().unwrap());
 
     //User Story/TODOs
-    //[] - Migrate all Routes From Go over to Rust
+    //[X] - Migrate all Routes From Go over to Rust
     //[] - Research the jobs api's we're pulling from (can find on discord)
     //[] - test that can receive information from those api's
     //[] - write that information to an excel sheet
